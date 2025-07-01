@@ -1,41 +1,41 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Download, Mail, MapPin } from "lucide-react"
-import { useEffect, useState } from "react"
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { Download, Mail, MapPin } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface ProfileData {
-  designation: string
-  introduction: string
-  resumeUrl: string
-  phone: string
-  email: string
-  location: string
+  designation: string;
+  introduction: string;
+  resumeUrl: string;
+  phone: string;
+  email: string;
+  location: string;
   socialLinks: {
-    linkedin: string
-    github: string
-    twitter: string
-  }
+    linkedin: string;
+    github: string;
+    twitter: string;
+  };
 }
 
 export default function ModernHero() {
-  const [profileData, setProfileData] = useState<ProfileData | null>(null)
+  const [profileData, setProfileData] = useState<ProfileData | null>(null);
 
   useEffect(() => {
     fetch("/api/profile")
-      .then((res) => res.json())
-      .then((data) => setProfileData(data))
-      .catch((error) => console.error("Error fetching profile:", error))
-  }, [])
+      .then(res => res.json())
+      .then(data => setProfileData(data))
+      .catch(error => console.error("Error fetching profile:", error));
+  }, []);
 
   if (!profileData) {
     return (
       <section className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-teal-400"></div>
       </section>
-    )
+    );
   }
 
   return (
@@ -46,12 +46,7 @@ export default function ModernHero() {
       <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-screen">
           {/* Left Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-8"
-          >
+          <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="space-y-8">
             <div className="space-y-4">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -128,7 +123,7 @@ export default function ModernHero() {
               className="flex gap-6"
             >
               <a
-                href={profileData.socialLinks.linkedin}
+                href={profileData.socialLinks?.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-teal-400 transition-colors"
@@ -138,7 +133,7 @@ export default function ModernHero() {
                 </svg>
               </a>
               <a
-                href={profileData.socialLinks.github}
+                href={profileData.socialLinks?.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-teal-400 transition-colors"
@@ -205,5 +200,5 @@ export default function ModernHero() {
         </div>
       </motion.div>
     </section>
-  )
+  );
 }

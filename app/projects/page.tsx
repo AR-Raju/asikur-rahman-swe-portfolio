@@ -1,36 +1,36 @@
-import Image from "next/image"
-import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { ExternalLink, Github } from "lucide-react"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { ExternalLink, Github } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 interface Project {
-  id: number
-  name: string
-  shortDescription: string
-  thumbnail: string
-  techStack: string[]
-  liveUrl: string
-  githubUrl: string
-  status: string
-  featured: boolean
+  id: number;
+  name: string;
+  shortDescription: string;
+  thumbnail: string;
+  techStack: string[];
+  liveUrl: string;
+  githubUrl: string;
+  status: string;
+  featured: boolean;
 }
 
 async function getProjects(): Promise<Project[]> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/projects`, {
     cache: "no-store",
-  })
+  });
 
   if (!res.ok) {
-    throw new Error("Failed to fetch projects")
+    throw new Error("Failed to fetch projects");
   }
 
-  return res.json()
+  return res.json();
 }
 
 export default async function ProjectsPage() {
-  const projects = await getProjects()
+  const projects = await getProjects();
 
   return (
     <div className="min-h-screen bg-gray-900 text-white py-20">
@@ -43,16 +43,11 @@ export default async function ProjectsPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project) => (
+          {projects.map(project => (
             <Card key={project.id} className="bg-gray-800 border-gray-700 hover:border-teal-500 transition-colors">
               <CardHeader className="p-0">
                 <div className="relative h-48 w-full">
-                  <Image
-                    src={project.thumbnail || "/placeholder.svg"}
-                    alt={project.name}
-                    fill
-                    className="object-cover rounded-t-lg"
-                  />
+                  <Image src={project.thumbnail || "/placeholder.svg"} alt={project.name} fill className="object-cover rounded-t-lg" />
                   <div className="absolute top-4 right-4">
                     <Badge variant={project.status === "Live" ? "default" : "secondary"}>{project.status}</Badge>
                   </div>
@@ -67,7 +62,7 @@ export default async function ProjectsPage() {
                 <CardTitle className="text-xl mb-2">{project.name}</CardTitle>
                 <CardDescription className="text-gray-400 mb-4">{project.shortDescription}</CardDescription>
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {project.techStack.slice(0, 3).map((tech) => (
+                  {project.techStack.slice(0, 3).map(tech => (
                     <Badge key={tech} variant="outline" className="text-xs">
                       {tech}
                     </Badge>
@@ -99,5 +94,5 @@ export default async function ProjectsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
