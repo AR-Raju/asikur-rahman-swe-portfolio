@@ -1,0 +1,70 @@
+[
+  {
+    "id": 1,
+    "name": "KloverCloud Platform",
+    "shortDescription": "A comprehensive cloud-native application platform for Kubernetes management",
+    "description": "KloverCloud is a sophisticated cloud-native platform that simplifies Kubernetes management and application deployment. Built with modern web technologies, it provides an intuitive interface for managing containerized applications, monitoring resources, and automating deployment pipelines. The platform features real-time monitoring, automated scaling, and comprehensive logging capabilities.",
+    "thumbnail": "/placeholder.svg?height=300&width=400",
+    "images": [
+      "/placeholder.svg?height=600&width=800",
+      "/placeholder.svg?height=600&width=800",
+      "/placeholder.svg?height=600&width=800"
+    ],
+    "techStack": ["Angular", "TypeScript", "Tailwind CSS", "Kubernetes", "Docker", "Go"],
+    "liveUrl": "https://klovercloud.com",
+    "githubUrl": "https://github.com/klovercloud-ci-cd",
+    "featured": true,
+    "status": "Live",
+    "startDate": "2022-01-01",
+    "endDate": "2024-12-01"
+  },
+  {
+    "id": 2,
+    "name": "TechIncent Blog",
+    "shortDescription": "A modern tech blog platform focused on web development tutorials and insights",
+    "description": "TechIncent is a comprehensive blog platform dedicated to sharing knowledge about web development, programming tutorials, and technology insights. The platform features a clean, modern design with advanced search capabilities, category filtering, and social sharing. Built with performance and SEO in mind, it delivers fast loading times and excellent user experience across all devices.",
+    "thumbnail": "/placeholder.svg?height=300&width=400",
+    "images": ["/placeholder.svg?height=600&width=800", "/placeholder.svg?height=600&width=800"],
+    "techStack": ["Next.js", "React", "Tailwind CSS", "MDX", "Vercel"],
+    "liveUrl": "https://techincent.com",
+    "githubUrl": "https://github.com/techincent/blog",
+    "featured": true,
+    "status": "Live",
+    "startDate": "2023-03-01",
+    "endDate": "2024-01-01"
+  },
+  {
+    "id": 3,
+    "name": "E-commerce Dashboard",
+    "shortDescription": "Comprehensive admin dashboard for managing e-commerce operations",
+    "description": "A powerful and intuitive admin dashboard designed for e-commerce businesses to manage their operations efficiently. Features include real-time sales analytics, inventory management, order processing, customer management, and detailed reporting. The dashboard provides actionable insights through interactive charts and graphs, helping businesses make data-driven decisions.",
+    "thumbnail": "/placeholder.svg?height=300&width=400",
+    "images": [
+      "/placeholder.svg?height=600&width=800",
+      "/placeholder.svg?height=600&width=800",
+      "/placeholder.svg?height=600&width=800"
+    ],
+    "techStack": ["React", "Material UI", "Chart.js", "Node.js", "Express", "MongoDB"],
+    "liveUrl": "#",
+    "githubUrl": "https://github.com/asikur/ecommerce-dashboard",
+    "featured": false,
+    "status": "In Development",
+    "startDate": "2023-06-01",
+    "endDate": null
+  },
+  {
+    "id": 4,
+    "name": "Task Management App",
+    "shortDescription": "Collaborative task management application with real-time updates",
+    "description": "A modern task management application that enables teams to collaborate effectively. Features include project creation, task assignment, progress tracking, real-time notifications, and team communication. The app supports multiple project views including Kanban boards, list view, and calendar integration.",
+    "thumbnail": "/placeholder.svg?height=300&width=400",
+    "images": ["/placeholder.svg?height=600&width=800", "/placeholder.svg?height=600&width=800"],
+    "techStack": ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Socket.io"],
+    "liveUrl": "#",
+    "githubUrl": "https://github.com/asikur/task-manager",
+    "featured": false,
+    "status": "Completed",
+    "startDate": "2023-01-01",
+    "endDate": "2023-05-01"
+  }
+]

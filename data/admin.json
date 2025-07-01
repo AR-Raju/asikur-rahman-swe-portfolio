@@ -1,0 +1,17 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "admin@portfolio.com",
+      "password": "$2b$10$rQZ8vQZ8vQZ8vQZ8vQZ8vOZ8vQZ8vQZ8vQZ8vQZ8vQZ8vQZ8vQZ8vQ",
+      "name": "Admin User",
+      "role": "admin",
+      "createdAt": "2024-01-01T00:00:00Z"
+    }
+  ],
+  "settings": {
+    "contactFormEnabled": true,
+    "maintenanceMode": false,
+    "lastBackup": "2024-01-01T00:00:00Z"
+  }
+}

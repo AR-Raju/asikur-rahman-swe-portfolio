@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "title": "Getting Started with Next.js 14: A Complete Guide",
+    "slug": "getting-started-nextjs-14",
+    "excerpt": "Learn how to build modern web applications with Next.js 14 and its new features including Server Components, improved routing, and enhanced performance optimizations.",
+    "content": "# Getting Started with Next.js 14: A Complete Guide\n\nNext.js 14 brings exciting new features and improvements that make building React applications even more powerful and efficient. In this comprehensive guide, we'll explore the key features and learn how to get started.\n\n## What's New in Next.js 14\n\nNext.js 14 introduces several groundbreaking features:\n\n### 1. Turbopack (Beta)\nTurbopack is the new bundler that's up to 700x faster than Webpack for local development.\n\n### 2. Server Actions (Stable)\nServer Actions are now stable, allowing you to run server-side code directly from your components.\n\n### 3. Partial Prerendering (Preview)\nA new rendering model that combines the benefits of static and dynamic rendering.\n\n## Getting Started\n\nTo create a new Next.js 14 project:\n\n```bash\nnpx create-next-app@latest my-app\ncd my-app\nnpm run dev\n```\n\n## Key Features to Explore\n\n1. **App Router**: The new file-system based router\n2. **Server Components**: React components that render on the server\n3. **Streaming**: Progressive rendering for better user experience\n4. **Data Fetching**: New patterns for fetching data\n\n## Conclusion\n\nNext.js 14 represents a significant step forward in React development, offering improved performance, better developer experience, and new capabilities that make building modern web applications more efficient than ever.",
+    "featuredImage": "/placeholder.svg?height=400&width=600",
+    "author": "Asikur Rahman",
+    "publishedAt": "2024-01-15T10:00:00Z",
+    "updatedAt": "2024-01-15T10:00:00Z",
+    "tags": ["Next.js", "React", "Web Development", "JavaScript"],
+    "category": "Tutorial",
+    "readTime": 8,
+    "featured": true
+  },
+  {
+    "id": 2,
+    "title": "Mastering Tailwind CSS: Advanced Techniques and Best Practices",
+    "slug": "mastering-tailwind-css",
+    "excerpt": "Discover advanced Tailwind CSS techniques, custom configurations, and best practices for building maintainable and scalable user interfaces.",
+    "content": "# Mastering Tailwind CSS: Advanced Techniques and Best Practices\n\nTailwind CSS has revolutionized how we approach styling in modern web development. This guide covers advanced techniques and best practices for mastering Tailwind CSS.\n\n## Advanced Configuration\n\n### Custom Color Palette\n\n```javascript\nmodule.exports = {\n  theme: {\n    extend: {\n      colors: {\n        brand: {\n          50: '#eff6ff',\n          500: '#3b82f6',\n          900: '#1e3a8a',\n        }\n      }\n    }\n  }\n}\n```\n\n### Custom Components\n\nCreate reusable component classes:\n\n```css\n@layer components {\n  .btn-primary {\n    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;\n  }\n}\n```\n\n## Performance Optimization\n\n1. **Purge Unused CSS**: Configure purging for production\n2. **JIT Mode**: Use Just-In-Time compilation\n3. **Component Extraction**: Extract repeated patterns\n\n## Best Practices\n\n- Use semantic class names for complex components\n- Leverage Tailwind's design system\n- Create custom utilities for project-specific needs\n- Use responsive design utilities effectively\n\n## Conclusion\n\nMastering Tailwind CSS requires understanding its philosophy and leveraging its powerful features effectively. With these techniques, you can build beautiful, maintainable interfaces.",
+    "featuredImage": "/placeholder.svg?height=400&width=600",
+    "author": "Asikur Rahman",
+    "publishedAt": "2023-12-20T14:30:00Z",
+    "updatedAt": "2023-12-20T14:30:00Z",
+    "tags": ["Tailwind CSS", "CSS", "Web Design", "Frontend"],
+    "category": "Tutorial",
+    "readTime": 12,
+    "featured": true
+  },
+  {
+    "id": 3,
+    "title": "React Server Components: The Future of React Development",
+    "slug": "react-server-components",
+    "excerpt": "Explore React Server Components and how they're changing the way we build React applications with improved performance and developer experience.",
+    "content": "# React Server Components: The Future of React Development\n\nReact Server Components represent a paradigm shift in how we build React applications. Let's explore what they are and how they work.\n\n## What are Server Components?\n\nServer Components are React components that render on the server, allowing you to:\n\n- Access backend resources directly\n- Reduce bundle size\n- Improve initial page load performance\n- Maintain rich interactivity where needed\n\n## Key Benefits\n\n### 1. Zero Bundle Size\nServer Components don't ship to the client, reducing JavaScript bundle size.\n\n### 2. Direct Backend Access\nAccess databases, file systems, and other server-only resources directly.\n\n### 3. Automatic Code Splitting\nComponents are automatically split at the server/client boundary.\n\n## Example Implementation\n\n```jsx\n// Server Component\nasync function BlogPost({ id }) {\n  const post = await db.posts.findById(id);\n  \n  return (\n    <article>\n      <h1>{post.title}</h1>\n      <p>{post.content}</p>\n      <LikeButton postId={id} /> {/* Client Component */}\n    </article>\n  );\n}\n```\n\n## Best Practices\n\n1. Use Server Components for data fetching\n2. Use Client Components for interactivity\n3. Minimize client-server boundaries\n4. Leverage streaming for better UX\n\n## Conclusion\n\nServer Components are reshaping React development, offering new possibilities for performance optimization and developer experience.",
+    "featuredImage": "/placeholder.svg?height=400&width=600",
+    "author": "Asikur Rahman",
+    "publishedAt": "2023-11-10T09:15:00Z",
+    "updatedAt": "2023-11-10T09:15:00Z",
+    "tags": ["React", "Server Components", "Performance", "Web Development"],
+    "category": "Advanced",
+    "readTime": 10,
+    "featured": false
+  },
+  {
+    "id": 4,
+    "title": "Building Scalable APIs with Node.js and Express",
+    "slug": "scalable-apis-nodejs-express",
+    "excerpt": "Learn how to build robust, scalable APIs using Node.js and Express with best practices for architecture, security, and performance.",
+    "content": "# Building Scalable APIs with Node.js and Express\n\nBuilding scalable APIs is crucial for modern web applications. This guide covers best practices for creating robust APIs with Node.js and Express.\n\n## Project Structure\n\n```\nsrc/\n├── controllers/\n├── middleware/\n├── models/\n├── routes/\n├── services/\n└── utils/\n```\n\n## Key Principles\n\n### 1. Separation of Concerns\nSeparate business logic from route handlers:\n\n```javascript\n// controllers/userController.js\nconst userService = require('../services/userService');\n\nexports.getUser = async (req, res) => {\n  try {\n    const user = await userService.getUserById(req.params.id);\n    res.json(user);\n  } catch (error) {\n    res.status(500).json({ error: error.message });\n  }\n};\n```\n\n### 2. Error Handling\nImplement centralized error handling:\n\n```javascript\napp.use((error, req, res, next) => {\n  const status = error.status || 500;\n  const message = error.message || 'Internal Server Error';\n  res.status(status).json({ error: message });\n});\n```\n\n### 3. Validation\nUse middleware for request validation:\n\n```javascript\nconst { body, validationResult } = require('express-validator');\n\nconst validateUser = [\n  body('email').isEmail(),\n  body('password').isLength({ min: 6 }),\n  (req, res, next) => {\n    const errors = validationResult(req);\n    if (!errors.isEmpty()) {\n      return res.status(400).json({ errors: errors.array() });\n    }\n    next();\n  }\n];\n```\n\n## Security Best Practices\n\n1. **Authentication & Authorization**\n2. **Rate Limiting**\n3. **Input Validation**\n4. **CORS Configuration**\n5. **Security Headers**\n\n## Performance Optimization\n\n- Use caching strategies\n- Implement database indexing\n- Use connection pooling\n- Monitor and profile your API\n\n## Conclusion\n\nBuilding scalable APIs requires careful planning, proper architecture, and adherence to best practices. Focus on maintainability, security, and performance from the start.",
+    "featuredImage": "/placeholder.svg?height=400&width=600",
+    "author": "Asikur Rahman",
+    "publishedAt": "2023-10-25T16:45:00Z",
+    "updatedAt": "2023-10-25T16:45:00Z",
+    "tags": ["Node.js", "Express", "API", "Backend", "JavaScript"],
+    "category": "Backend",
+    "readTime": 15,
+    "featured": false
+  }
+]

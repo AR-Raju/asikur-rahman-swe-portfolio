@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "name": "React",
+    "level": 90,
+    "category": "Frontend",
+    "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
+  },
+  {
+    "id": 2,
+    "name": "Next.js",
+    "level": 85,
+    "category": "Frontend",
+    "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg"
+  },
+  {
+    "id": 3,
+    "name": "TypeScript",
+    "level": 90,
+    "category": "Language",
+    "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg"
+  },
+  {
+    "id": 4,
+    "name": "JavaScript",
+    "level": 95,
+    "category": "Language",
+    "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"
+  },
+  {
+    "id": 5,
+    "name": "Node.js",
+    "level": 85,
+    "category": "Backend",
+    "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg"
+  },
+  {
+    "id": 6,
+    "name": "MongoDB",
+    "level": 80,
+    "category": "Database",
+    "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg"
+  },
+  {
+    "id": 7,
+    "name": "Tailwind CSS",
+    "level": 90,
+    "category": "Frontend",
+    "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-plain.svg"
+  },
+  {
+    "id": 8,
+    "name": "Git",
+    "level": 90,
+    "category": "Tools",
+    "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg"
+  }
+]

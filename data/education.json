@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "institution": "Daffodil International University",
+    "degree": "Bachelor of Science in Computer Science & Engineering",
+    "period": "2018 - 2022",
+    "description": "Graduated with distinction. Focused on software engineering, algorithms, and web development. Completed final year project on e-commerce platform development.",
+    "location": "Dhaka, Bangladesh",
+    "gpa": "3.75/4.00"
+  },
+  {
+    "id": 2,
+    "institution": "Dhaka Polytechnic Institute",
+    "degree": "Diploma in Computer Technology",
+    "period": "2014 - 2018",
+    "description": "Specialized in computer programming and web technologies. Gained foundational knowledge in software development and database management.",
+    "location": "Dhaka, Bangladesh",
+    "gpa": "3.85/4.00"
+  }
+]
