@@ -1,15 +1,14 @@
 "use client";
 
-import type React from "react";
-
+import { apiClient } from "@/lib/auth";
 import { usePathname, useRouter } from "next/navigation";
+import type React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
   id: string;
   email: string;
   name: string;
-  role: string;
 }
 
 interface AdminContextType {
@@ -23,36 +22,30 @@ const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 export function AdminProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
-    // Only check auth if we're on admin pages but not login page
-    if (pathname?.startsWith("/admin") && pathname !== "/admin/login") {
-      checkAuth();
+    // Don't check auth on login page
+    if (pathname === "/admin/login") {
+      setLoading(false);
+      return;
     }
+
+    checkAuth();
   }, [pathname]);
 
   const checkAuth = async () => {
-    setLoading(true);
     try {
-      const response = await fetch("/api/auth/me", {
-        credentials: "include",
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
-      } else {
-        setUser(null);
-        if (pathname?.startsWith("/admin") && pathname !== "/admin/login") {
-          router.push("/admin/login");
-        }
-      }
+      const response = await apiClient.getCurrentUser();
+      setUser(response.data);
     } catch (error) {
       console.error("Auth check failed:", error);
       setUser(null);
+      if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
+        router.push("/admin/login");
+      }
     } finally {
       setLoading(false);
     }
@@ -60,19 +53,10 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
-        return true;
-      }
-      return false;
+      const response = await apiClient.login(email, password);
+      setUser(response.user);
+      router.push("/admin");
+      return true;
     } catch (error) {
       console.error("Login failed:", error);
       return false;
@@ -81,14 +65,12 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
-      await fetch("/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-      setUser(null);
-      router.push("/admin/login");
+      await apiClient.logout();
     } catch (error) {
       console.error("Logout failed:", error);
+    } finally {
+      setUser(null);
+      router.push("/admin/login");
     }
   };
 

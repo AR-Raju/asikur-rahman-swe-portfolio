@@ -1,6 +1,5 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { verifyToken } from "./lib/auth";
 
 export async function middleware(request: NextRequest) {
   // Check if the request is for admin routes
@@ -17,11 +16,11 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
 
-    // Verify the token
-    const payload = await verifyToken(token);
-    if (!payload) {
-      return NextResponse.redirect(new URL("/admin/login", request.url));
-    }
+    // // Verify the token
+    // const payload = await verifyToken(token);
+    // if (!payload) {
+    //   return NextResponse.redirect(new URL("/admin/login", request.url));
+    // }
 
     // Token is valid, allow access
     return NextResponse.next();

@@ -25,15 +25,17 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   }
 
   if (!user) {
-    return null; // Middleware will redirect
+    return null; // Will redirect via context
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50">
       <AdminSidebar />
-      <div className="flex-1 flex flex-col">
+      <div className="lg:pl-64">
         <AdminHeader />
-        <main className="flex-1 p-6 overflow-auto">{children}</main>
+        <main className="h-[calc(100vh-4rem)] overflow-y-auto bg-gray-50">
+          <div className="p-6 pt-24">{children}</div>
+        </main>
       </div>
     </div>
   );

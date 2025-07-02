@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { apiClient } from "@/lib/auth";
 import { Github, Linkedin, Mail, MapPin, Phone, Save, Twitter, Upload, User } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
@@ -16,7 +17,7 @@ interface ProfileData {
   resumeUrl: string;
   phone: string;
   email: string;
-  location: string;
+  address: string;
   socialLinks: {
     linkedin: string;
     github: string;
@@ -37,11 +38,8 @@ export default function AdminProfile() {
 
   const fetchProfile = async () => {
     try {
-      const response = await fetch("/api/admin/profile");
-      if (response.ok) {
-        const data = await response.json();
-        setProfile(data);
-      }
+      const response = await apiClient.getProfile();
+      setProfile(response.data);
     } catch (error) {
       toast({
         title: "Error",
@@ -59,33 +57,24 @@ export default function AdminProfile() {
 
     setSaving(true);
     try {
-      const formData = new FormData();
-      formData.append("designation", profile.designation);
-      formData.append("introduction", profile.introduction);
-      formData.append("phone", profile.phone);
-      formData.append("email", profile.email);
-      formData.append("location", profile.location);
-      formData.append("socialLinks", JSON.stringify(profile.socialLinks));
+      let resumeUrl = profile.resumeUrl;
 
+      // Upload resume if a new file is selected
       if (resumeFile) {
-        formData.append("resume", resumeFile);
+        const uploadResponse = await apiClient.uploadImage(resumeFile);
+        resumeUrl = uploadResponse.data.url;
       }
 
-      const response = await fetch("/api/admin/profile", {
-        method: "PUT",
-        body: formData,
+      const updatedProfile = await apiClient.updateProfile({
+        ...profile,
+        resumeUrl,
       });
 
-      if (response.ok) {
-        const updatedProfile = await response.json();
-        setProfile(updatedProfile);
-        toast({
-          title: "Success",
-          description: "Profile updated successfully",
-        });
-      } else {
-        throw new Error("Failed to update profile");
-      }
+      setProfile(updatedProfile.data);
+      toast({
+        title: "Success",
+        description: "Profile updated successfully",
+      });
     } catch (error) {
       toast({
         title: "Error",
@@ -116,11 +105,11 @@ export default function AdminProfile() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div>
+        <div className="bg-white p-6 rounded-lg border border-gray-200">
           <h1 className="text-2xl font-bold text-gray-900">Profile Management</h1>
           <p className="text-gray-600">Update your personal information and resume</p>
         </div>
-        <Card>
+        <Card className="bg-white border border-gray-200">
           <CardContent className="p-6">
             <div className="animate-pulse space-y-4">
               <div className="h-4 bg-gray-200 rounded w-1/4"></div>
@@ -136,7 +125,7 @@ export default function AdminProfile() {
 
   if (!profile) {
     return (
-      <div className="text-center py-12">
+      <div className="bg-white p-12 rounded-lg border border-gray-200 text-center">
         <p className="text-gray-500">Failed to load profile data</p>
       </div>
     );
@@ -144,47 +133,51 @@ export default function AdminProfile() {
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="bg-white p-6 rounded-lg border border-gray-200">
         <h1 className="text-2xl font-bold text-gray-900">Profile Management</h1>
         <p className="text-gray-600">Update your personal information and resume</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        <Card className="bg-white border border-gray-200">
+          <CardHeader className="bg-white">
+            <CardTitle className="flex items-center gap-2 text-gray-900">
               <User className="h-5 w-5" />
               Basic Information
             </CardTitle>
-            <CardDescription>Your professional details and contact information</CardDescription>
+            <CardDescription className="text-gray-600">Your professional details and contact information</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 bg-white">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="designation">Designation</Label>
+                <Label htmlFor="designation" className="text-gray-700">
+                  Designation
+                </Label>
                 <Input
                   id="designation"
                   value={profile.designation}
                   onChange={e => handleInputChange("designation", e.target.value)}
                   placeholder="e.g., Senior Software Engineer"
+                  className="bg-white border-gray-300 text-gray-900"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="location" className="flex items-center gap-2">
+                <Label htmlFor="address" className="flex items-center gap-2 text-gray-700">
                   <MapPin className="h-4 w-4" />
-                  Location
+                  Address
                 </Label>
                 <Input
-                  id="location"
-                  value={profile.location}
-                  onChange={e => handleInputChange("location", e.target.value)}
+                  id="address"
+                  value={profile.address}
+                  onChange={e => handleInputChange("address", e.target.value)}
                   placeholder="e.g., Dhaka, Bangladesh"
+                  className="bg-white border-gray-300 text-gray-900"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="phone" className="flex items-center gap-2">
+                <Label htmlFor="phone" className="flex items-center gap-2 text-gray-700">
                   <Phone className="h-4 w-4" />
                   Phone
                 </Label>
@@ -193,11 +186,12 @@ export default function AdminProfile() {
                   value={profile.phone}
                   onChange={e => handleInputChange("phone", e.target.value)}
                   placeholder="e.g., +880 123 456 7890"
+                  className="bg-white border-gray-300 text-gray-900"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="flex items-center gap-2">
+                <Label htmlFor="email" className="flex items-center gap-2 text-gray-700">
                   <Mail className="h-4 w-4" />
                   Email
                 </Label>
@@ -207,32 +201,35 @@ export default function AdminProfile() {
                   value={profile.email}
                   onChange={e => handleInputChange("email", e.target.value)}
                   placeholder="e.g., your@email.com"
+                  className="bg-white border-gray-300 text-gray-900"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="introduction">Introduction</Label>
+              <Label htmlFor="introduction" className="text-gray-700">
+                Introduction
+              </Label>
               <Textarea
                 id="introduction"
                 value={profile.introduction}
                 onChange={e => handleInputChange("introduction", e.target.value)}
-                className="min-h-[120px]"
+                className="min-h-[120px] bg-white border-gray-300 text-gray-900"
                 placeholder="Write a brief introduction about yourself..."
               />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Social Links</CardTitle>
-            <CardDescription>Your professional social media profiles</CardDescription>
+        <Card className="bg-white border border-gray-200">
+          <CardHeader className="bg-white">
+            <CardTitle className="text-gray-900">Social Links</CardTitle>
+            <CardDescription className="text-gray-600">Your professional social media profiles</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 bg-white">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="linkedin" className="flex items-center gap-2">
+                <Label htmlFor="linkedin" className="flex items-center gap-2 text-gray-700">
                   <Linkedin className="h-4 w-4" />
                   LinkedIn
                 </Label>
@@ -241,11 +238,12 @@ export default function AdminProfile() {
                   value={profile.socialLinks.linkedin}
                   onChange={e => handleSocialLinkChange("linkedin", e.target.value)}
                   placeholder="https://linkedin.com/in/username"
+                  className="bg-white border-gray-300 text-gray-900"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="github" className="flex items-center gap-2">
+                <Label htmlFor="github" className="flex items-center gap-2 text-gray-700">
                   <Github className="h-4 w-4" />
                   GitHub
                 </Label>
@@ -254,11 +252,12 @@ export default function AdminProfile() {
                   value={profile.socialLinks.github}
                   onChange={e => handleSocialLinkChange("github", e.target.value)}
                   placeholder="https://github.com/username"
+                  className="bg-white border-gray-300 text-gray-900"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="twitter" className="flex items-center gap-2">
+                <Label htmlFor="twitter" className="flex items-center gap-2 text-gray-700">
                   <Twitter className="h-4 w-4" />
                   Twitter
                 </Label>
@@ -267,27 +266,36 @@ export default function AdminProfile() {
                   value={profile.socialLinks.twitter}
                   onChange={e => handleSocialLinkChange("twitter", e.target.value)}
                   placeholder="https://twitter.com/username"
+                  className="bg-white border-gray-300 text-gray-900"
                 />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        <Card className="bg-white border border-gray-200">
+          <CardHeader className="bg-white">
+            <CardTitle className="flex items-center gap-2 text-gray-900">
               <Upload className="h-5 w-5" />
               Resume
             </CardTitle>
-            <CardDescription>Upload your latest resume (PDF format)</CardDescription>
+            <CardDescription className="text-gray-600">Upload your latest resume (PDF format)</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 bg-white">
             <div className="space-y-2">
-              <Label htmlFor="resume">Resume File</Label>
+              <Label htmlFor="resume" className="text-gray-700">
+                Resume File
+              </Label>
               <div className="flex items-center gap-4">
-                <Input id="resume" type="file" accept=".pdf" onChange={e => setResumeFile(e.target.files?.[0] || null)} />
+                <Input
+                  id="resume"
+                  type="file"
+                  accept=".pdf"
+                  onChange={e => setResumeFile(e.target.files?.[0] || null)}
+                  className="bg-white border-gray-300 text-gray-900"
+                />
                 {profile.resumeUrl && (
-                  <Button type="button" variant="outline" size="sm" asChild>
+                  <Button type="button" variant="outline" size="sm" asChild className="bg-white border-gray-300 text-gray-700">
                     <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer">
                       View Current
                     </a>
@@ -299,7 +307,7 @@ export default function AdminProfile() {
         </Card>
 
         <div className="flex justify-end">
-          <Button type="submit" disabled={saving} className="bg-blue-600 hover:bg-blue-700">
+          <Button type="submit" disabled={saving} className="bg-blue-600 hover:bg-blue-700 text-white">
             {saving ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>

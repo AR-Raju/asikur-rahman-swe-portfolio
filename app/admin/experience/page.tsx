@@ -1,13 +1,13 @@
 "use client";
 
 import DataTable from "@/components/admin/DataTable";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { apiClient } from "@/lib/auth";
 import type React from "react";
 import { useEffect, useState } from "react";
 
@@ -15,9 +15,8 @@ interface Experience {
   _id: string;
   company: string;
   position: string;
-  period: string;
-  description: string[];
-  tags: string[];
+  duration: string;
+  description: string;
 }
 
 export default function AdminExperience() {
@@ -28,9 +27,8 @@ export default function AdminExperience() {
   const [formData, setFormData] = useState({
     company: "",
     position: "",
-    period: "",
+    duration: "",
     description: "",
-    tags: "",
   });
   const { toast } = useToast();
 
@@ -40,11 +38,8 @@ export default function AdminExperience() {
 
   const fetchExperience = async () => {
     try {
-      const response = await fetch("/api/admin/experience");
-      if (response.ok) {
-        const data = await response.json();
-        setExperience(data);
-      }
+      const response = await apiClient.getExperience();
+      setExperience(response.data);
     } catch (error) {
       toast({
         title: "Error",
@@ -61,9 +56,8 @@ export default function AdminExperience() {
     setFormData({
       company: "",
       position: "",
-      period: "",
+      duration: "",
       description: "",
-      tags: "",
     });
     setIsModalOpen(true);
   };
@@ -73,9 +67,8 @@ export default function AdminExperience() {
     setFormData({
       company: item.company,
       position: item.position,
-      period: item.period,
-      description: item.description.join("\n"),
-      tags: item.tags.join(", "),
+      duration: item.duration,
+      description: item.description,
     });
     setIsModalOpen(true);
   };
@@ -84,17 +77,12 @@ export default function AdminExperience() {
     if (!confirm("Are you sure you want to delete this experience entry?")) return;
 
     try {
-      const response = await fetch(`/api/admin/experience/${item._id}`, {
-        method: "DELETE",
+      await apiClient.deleteExperience(item._id);
+      setExperience(experience.filter(e => e._id !== item._id));
+      toast({
+        title: "Success",
+        description: "Experience entry deleted successfully",
       });
-
-      if (response.ok) {
-        setExperience(experience.filter(e => e._id !== item._id));
-        toast({
-          title: "Success",
-          description: "Experience entry deleted successfully",
-        });
-      }
     } catch (error) {
       toast({
         title: "Error",
@@ -107,40 +95,19 @@ export default function AdminExperience() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const submitData = {
-      company: formData.company,
-      position: formData.position,
-      period: formData.period,
-      description: formData.description.split("\n").filter(line => line.trim()),
-      tags: formData.tags
-        .split(",")
-        .map(tag => tag.trim())
-        .filter(Boolean),
-    };
-
     try {
-      const url = editingItem ? `/api/admin/experience/${editingItem._id}` : "/api/admin/experience";
-      const method = editingItem ? "PUT" : "POST";
-
-      const response = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(submitData),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (editingItem) {
-          setExperience(experience.map(e => (e._id === editingItem._id ? data : e)));
-        } else {
-          setExperience([...experience, data]);
-        }
-        setIsModalOpen(false);
-        toast({
-          title: "Success",
-          description: `Experience entry ${editingItem ? "updated" : "created"} successfully`,
-        });
+      if (editingItem) {
+        const response = await apiClient.updateExperience(editingItem._id, formData);
+        setExperience(experience.map(e => (e._id === editingItem._id ? response.data : e)));
+      } else {
+        const response = await apiClient.createExperience(formData);
+        setExperience([...experience, response.data]);
       }
+      setIsModalOpen(false);
+      toast({
+        title: "Success",
+        description: `Experience entry ${editingItem ? "updated" : "created"} successfully`,
+      });
     } catch (error) {
       toast({
         title: "Error",
@@ -153,23 +120,12 @@ export default function AdminExperience() {
   const columns = [
     { key: "company", label: "Company" },
     { key: "position", label: "Position" },
-    { key: "period", label: "Period" },
+    { key: "duration", label: "Duration" },
     {
-      key: "tags",
-      label: "Technologies",
-      render: (tags: string[]) => (
-        <div className="flex flex-wrap gap-1">
-          {tags.slice(0, 3).map((tag, index) => (
-            <Badge key={index} variant="outline" className="text-xs">
-              {tag}
-            </Badge>
-          ))}
-          {tags.length > 3 && (
-            <Badge variant="outline" className="text-xs">
-              +{tags.length - 3}
-            </Badge>
-          )}
-        </div>
+      key: "description",
+      label: "Description",
+      render: (description: string) => (
+        <span className="text-gray-600 text-sm">{description.length > 50 ? `${description.substring(0, 50)}...` : description}</span>
       ),
     },
   ];
@@ -177,7 +133,7 @@ export default function AdminExperience() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div>
+        <div className="bg-white p-6 rounded-lg border border-gray-200">
           <h1 className="text-2xl font-bold text-gray-900">Experience Management</h1>
           <p className="text-gray-600">Manage your work experience</p>
         </div>
@@ -203,73 +159,82 @@ export default function AdminExperience() {
       />
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl bg-white border border-gray-200">
           <DialogHeader>
-            <DialogTitle>{editingItem ? "Edit Experience" : "Add Experience"}</DialogTitle>
-            <DialogDescription>{editingItem ? "Update the experience details" : "Add a new experience entry"}</DialogDescription>
+            <DialogTitle className="text-gray-900">{editingItem ? "Edit Experience" : "Add Experience"}</DialogTitle>
+            <DialogDescription className="text-gray-600">
+              {editingItem ? "Update the experience details" : "Add a new experience entry"}
+            </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="company">Company</Label>
+                <Label htmlFor="company" className="text-gray-700">
+                  Company
+                </Label>
                 <Input
                   id="company"
                   value={formData.company}
                   onChange={e => setFormData({ ...formData, company: e.target.value })}
                   required
+                  className="bg-white border-gray-300 text-gray-900"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="position">Position</Label>
+                <Label htmlFor="position" className="text-gray-700">
+                  Position
+                </Label>
                 <Input
                   id="position"
                   value={formData.position}
                   onChange={e => setFormData({ ...formData, position: e.target.value })}
                   required
+                  className="bg-white border-gray-300 text-gray-900"
+                />
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <Label htmlFor="duration" className="text-gray-700">
+                  Duration
+                </Label>
+                <Input
+                  id="duration"
+                  value={formData.duration}
+                  onChange={e => setFormData({ ...formData, duration: e.target.value })}
+                  placeholder="e.g., Jan 2022 - Present"
+                  required
+                  className="bg-white border-gray-300 text-gray-900"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="period">Period</Label>
-              <Input
-                id="period"
-                value={formData.period}
-                onChange={e => setFormData({ ...formData, period: e.target.value })}
-                placeholder="e.g., May 2024 — Present"
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="description">Description (one point per line)</Label>
+              <Label htmlFor="description" className="text-gray-700">
+                Description
+              </Label>
               <Textarea
                 id="description"
                 value={formData.description}
                 onChange={e => setFormData({ ...formData, description: e.target.value })}
                 rows={5}
-                placeholder="Enter each responsibility or achievement on a new line"
+                placeholder="Describe your responsibilities and achievements"
                 required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="tags">Technologies (comma-separated)</Label>
-              <Input
-                id="tags"
-                value={formData.tags}
-                onChange={e => setFormData({ ...formData, tags: e.target.value })}
-                placeholder="e.g., React, TypeScript, Node.js"
+                className="bg-white border-gray-300 text-gray-900"
               />
             </div>
 
             <div className="flex justify-end gap-2">
-              <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsModalOpen(false)}
+                className="bg-white border-gray-300 text-gray-700"
+              >
                 Cancel
               </Button>
-              <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+              <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">
                 {editingItem ? "Update" : "Create"}
               </Button>
             </div>
