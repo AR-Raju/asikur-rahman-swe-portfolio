@@ -7,17 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { Education } from "@/interfaces";
 import { apiClient } from "@/lib/auth";
 import type React from "react";
 import { useEffect, useState } from "react";
-
-interface Education {
-  _id: string;
-  institution: string;
-  degree: string;
-  duration: string;
-  description: string;
-}
 
 export default function AdminEducation() {
   const [education, setEducation] = useState<Education[]>([]);

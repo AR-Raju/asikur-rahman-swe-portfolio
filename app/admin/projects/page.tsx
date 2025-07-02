@@ -9,26 +9,11 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { Project } from "@/interfaces";
 import { apiClient } from "@/lib/auth";
 import { ExternalLink, Github, Star } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
-
-interface Project {
-  _id: string;
-  name: string;
-  shortDescription: string;
-  detailedDescription: string;
-  techStack: string[];
-  images: string[];
-  links: {
-    live?: string;
-    github?: string;
-    demo?: string;
-  };
-  featured: boolean;
-  status: string;
-}
 
 export default function AdminProjects() {
   const [projects, setProjects] = useState<Project[]>([]);

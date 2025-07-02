@@ -31,9 +31,8 @@ interface DataTableProps {
 export default function DataTable({ data, columns, onAdd, onEdit, onDelete, searchKey, title, description }: DataTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredData = Object.values(data).flatMap(array =>
-    array.filter((item: { [x: string]: string }) => item[searchKey]?.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const filteredData =
+    data?.filter((item: { [x: string]: string }) => item[searchKey]?.toLowerCase().includes(searchTerm.toLowerCase())) || [];
 
   return (
     <div className="space-y-6">

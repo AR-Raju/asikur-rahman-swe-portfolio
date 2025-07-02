@@ -1,45 +1,45 @@
-import Image from "next/image"
-import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Calendar, Clock, User } from "lucide-react"
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Calendar, Clock, User } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 interface Blog {
-  id: number
-  title: string
-  slug: string
-  excerpt: string
-  featuredImage: string
-  author: string
-  publishedAt: string
-  tags: string[]
-  category: string
-  readTime: number
-  featured: boolean
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  featuredImage: string;
+  author: string;
+  publishedAt: string;
+  tags: string[];
+  category: string;
+  readTime: number;
+  featured: boolean;
 }
 
 async function getBlogs(): Promise<Blog[]> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/blogs`, {
     cache: "no-store",
-  })
+  });
 
   if (!res.ok) {
-    throw new Error("Failed to fetch blogs")
+    throw new Error("Failed to fetch blogs");
   }
 
-  return res.json()
+  return res.json();
 }
 
 export default async function BlogsPage() {
-  const blogs = await getBlogs()
+  const blogs = await getBlogs();
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
-    })
-  }
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white py-20">
@@ -52,16 +52,11 @@ export default async function BlogsPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogs.map((blog) => (
+          {blogs.map(blog => (
             <Card key={blog.id} className="bg-gray-800 border-gray-700 hover:border-teal-500 transition-colors">
               <CardHeader className="p-0">
                 <div className="relative h-48 w-full">
-                  <Image
-                    src={blog.featuredImage || "/placeholder.svg"}
-                    alt={blog.title}
-                    fill
-                    className="object-cover rounded-t-lg"
-                  />
+                  <Image src={blog.featuredImage || "/placeholder.svg"} alt={blog.title} fill className="object-cover rounded-t-lg" />
                   {blog.featured && (
                     <div className="absolute top-4 left-4">
                       <Badge className="bg-teal-500 text-gray-900">Featured</Badge>
@@ -96,7 +91,7 @@ export default async function BlogsPage() {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  {blog.tags.slice(0, 3).map((tag) => (
+                  {blog.tags.slice(0, 3).map(tag => (
                     <Badge key={tag} variant="outline" className="text-xs">
                       {tag}
                     </Badge>
@@ -113,5 +108,5 @@ export default async function BlogsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

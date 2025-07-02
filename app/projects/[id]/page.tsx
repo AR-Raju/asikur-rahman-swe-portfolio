@@ -1,48 +1,48 @@
-import Image from "next/image"
-import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { ArrowLeft, ExternalLink, Github, Calendar } from "lucide-react"
-import { notFound } from "next/navigation"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowLeft, Calendar, ExternalLink, Github } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
 interface Project {
-  id: number
-  name: string
-  description: string
-  images: string[]
-  techStack: string[]
-  liveUrl: string
-  githubUrl: string
-  status: string
-  startDate: string
-  endDate: string | null
+  id: number;
+  name: string;
+  description: string;
+  images: string[];
+  techStack: string[];
+  liveUrl: string;
+  githubUrl: string;
+  status: string;
+  startDate: string;
+  endDate: string | null;
 }
 
 async function getProject(id: string): Promise<Project> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/projects/${id}`, {
     cache: "no-store",
-  })
+  });
 
   if (!res.ok) {
     if (res.status === 404) {
-      notFound()
+      notFound();
     }
-    throw new Error("Failed to fetch project")
+    throw new Error("Failed to fetch project");
   }
 
-  return res.json()
+  return res.json();
 }
 
 export default async function ProjectDetailPage({ params }: { params: { id: string } }) {
-  const project = await getProject(params.id)
+  const project = await getProject(params.id);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
-    })
-  }
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white py-20">
@@ -120,7 +120,7 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
               <CardContent className="p-6">
                 <h3 className="text-xl font-bold mb-4">Tech Stack</h3>
                 <div className="flex flex-wrap gap-2">
-                  {project.techStack.map((tech) => (
+                  {project.techStack.map(tech => (
                     <Badge key={tech} variant="outline" className="text-sm">
                       {tech}
                     </Badge>
@@ -152,5 +152,5 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
         </div>
       </div>
     </div>
-  )
+  );
 }

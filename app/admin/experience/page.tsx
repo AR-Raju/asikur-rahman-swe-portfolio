@@ -7,17 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { Experience } from "@/interfaces";
 import { apiClient } from "@/lib/auth";
 import type React from "react";
 import { useEffect, useState } from "react";
-
-interface Experience {
-  _id: string;
-  company: string;
-  position: string;
-  duration: string;
-  description: string;
-}
 
 export default function AdminExperience() {
   const [experience, setExperience] = useState<Experience[]>([]);

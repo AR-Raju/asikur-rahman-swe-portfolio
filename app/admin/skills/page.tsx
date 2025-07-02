@@ -8,16 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { Skill } from "@/interfaces";
 import { apiClient } from "@/lib/auth";
 import type React from "react";
 import { useEffect, useState } from "react";
-
-interface Skill {
-  _id: string;
-  name: string;
-  level: string;
-  category: string;
-}
 
 const skillCategories = ["Frontend", "Backend", "Database", "DevOps", "Mobile", "Design", "Other"];
 const skillLevels = ["Beginner", "Intermediate", "Advanced", "Expert"];

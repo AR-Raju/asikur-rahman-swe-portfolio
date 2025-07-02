@@ -2,7 +2,7 @@
 
 import AdminHeader from "@/components/admin/AdminHeader";
 import AdminSidebar from "@/components/admin/AdminSidebar";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
 import { AdminProvider, useAdmin } from "@/contexts/AdminContext";
 import { usePathname } from "next/navigation";
 import type React from "react";

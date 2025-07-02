@@ -1,49 +1,49 @@
-import Image from "next/image"
-import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { ArrowLeft, Calendar, Clock, User, Share2 } from "lucide-react"
-import { notFound } from "next/navigation"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowLeft, Calendar, Clock, Share2, User } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
 interface Blog {
-  id: number
-  title: string
-  content: string
-  featuredImage: string
-  author: string
-  publishedAt: string
-  updatedAt: string
-  tags: string[]
-  category: string
-  readTime: number
+  id: number;
+  title: string;
+  content: string;
+  featuredImage: string;
+  author: string;
+  publishedAt: string;
+  updatedAt: string;
+  tags: string[];
+  category: string;
+  readTime: number;
 }
 
 async function getBlog(id: string): Promise<Blog> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/blogs/${id}`, {
     cache: "no-store",
-  })
+  });
 
   if (!res.ok) {
     if (res.status === 404) {
-      notFound()
+      notFound();
     }
-    throw new Error("Failed to fetch blog")
+    throw new Error("Failed to fetch blog");
   }
 
-  return res.json()
+  return res.json();
 }
 
 export default async function BlogDetailPage({ params }: { params: { id: string } }) {
-  const blog = await getBlog(params.id)
+  const blog = await getBlog(params.id);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
-    })
-  }
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white py-20">
@@ -80,7 +80,7 @@ export default async function BlogDetailPage({ params }: { params: { id: string 
             </div>
 
             <div className="flex flex-wrap gap-2 mb-8">
-              {blog.tags.map((tag) => (
+              {blog.tags.map(tag => (
                 <Badge key={tag} variant="outline">
                   {tag}
                 </Badge>
@@ -111,5 +111,5 @@ export default async function BlogDetailPage({ params }: { params: { id: string 
         </div>
       </div>
     </div>
-  )
+  );
 }

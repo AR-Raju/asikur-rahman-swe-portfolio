@@ -1,35 +1,24 @@
 "use client";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { ProfileData } from "@/interfaces";
 import { apiClient } from "@/lib/auth";
-import { Github, Linkedin, Mail, MapPin, Phone, Save, Twitter, Upload, User } from "lucide-react";
+import { Camera, Edit, Github, Linkedin, Mail, MapPin, Phone, Save, Twitter, Upload, User } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
-
-interface ProfileData {
-  designation: string;
-  introduction: string;
-  resumeUrl: string;
-  phone: string;
-  email: string;
-  address: string;
-  socialLinks: {
-    linkedin: string;
-    github: string;
-    twitter: string;
-  };
-}
 
 export default function AdminProfile() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [profilePictureFile, setProfilePictureFile] = useState<File | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -58,6 +47,7 @@ export default function AdminProfile() {
     setSaving(true);
     try {
       let resumeUrl = profile.resumeUrl;
+      let profilePictureUrl = profile.profilePicture;
 
       // Upload resume if a new file is selected
       if (resumeFile) {
@@ -65,9 +55,16 @@ export default function AdminProfile() {
         resumeUrl = uploadResponse.data.url;
       }
 
+      // Upload profile picture if a new file is selected
+      if (profilePictureFile) {
+        const uploadResponse = await apiClient.uploadImage(profilePictureFile);
+        profilePictureUrl = uploadResponse.data.url;
+      }
+
       const updatedProfile = await apiClient.updateProfile({
         ...profile,
         resumeUrl,
+        profilePicture: profilePictureUrl,
       });
 
       setProfile(updatedProfile.data);
@@ -100,6 +97,18 @@ export default function AdminProfile() {
         [platform]: value,
       },
     });
+  };
+
+  const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setProfilePictureFile(file);
+      // Create preview URL
+      const previewUrl = URL.createObjectURL(file);
+      if (profile) {
+        setProfile({ ...profile, profilePicture: previewUrl });
+      }
+    }
   };
 
   if (loading) {
@@ -139,10 +148,61 @@ export default function AdminProfile() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Profile Picture and Name Section */}
         <Card className="bg-white border border-gray-200">
           <CardHeader className="bg-white">
             <CardTitle className="flex items-center gap-2 text-gray-900">
               <User className="h-5 w-5" />
+              Profile Picture & Name
+            </CardTitle>
+            <CardDescription className="text-gray-600">Your profile picture and display name</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6 bg-white">
+            <div className="flex items-center space-x-6">
+              <div className="relative">
+                <Avatar className="h-24 w-24">
+                  <AvatarImage src={profile.profilePicture || "/placeholder.svg?height=96&width=96"} alt="Profile Picture" />
+                  <AvatarFallback className="bg-blue-100 text-blue-700 text-2xl">
+                    {profile.name?.charAt(0).toUpperCase() || "U"}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="absolute -bottom-2 -right-2">
+                  <Label htmlFor="profilePicture" className="cursor-pointer">
+                    <div className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-2 shadow-lg transition-colors">
+                      <Camera className="h-4 w-4" />
+                    </div>
+                  </Label>
+                  <Input id="profilePicture" type="file" accept="image/*" onChange={handleProfilePictureChange} className="hidden" />
+                </div>
+              </div>
+              <div className="flex-1 space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="text-gray-700 font-medium">
+                    Full Name
+                  </Label>
+                  <Input
+                    id="name"
+                    value={profile.name || ""}
+                    onChange={e => handleInputChange("name", e.target.value)}
+                    placeholder="e.g., John Doe"
+                    className="bg-white border-gray-300 text-gray-900"
+                  />
+                </div>
+                <div className="text-sm text-gray-500">
+                  <p>• Upload a professional profile picture (JPG, PNG)</p>
+                  <p>• Recommended size: 400x400 pixels</p>
+                  <p>• Maximum file size: 5MB</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Basic Information Section */}
+        <Card className="bg-white border border-gray-200">
+          <CardHeader className="bg-white">
+            <CardTitle className="flex items-center gap-2 text-gray-900">
+              <Edit className="h-5 w-5" />
               Basic Information
             </CardTitle>
             <CardDescription className="text-gray-600">Your professional details and contact information</CardDescription>
@@ -150,7 +210,7 @@ export default function AdminProfile() {
           <CardContent className="space-y-4 bg-white">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="designation" className="text-gray-700">
+                <Label htmlFor="designation" className="text-gray-700 font-medium">
                   Designation
                 </Label>
                 <Input
@@ -163,7 +223,7 @@ export default function AdminProfile() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="address" className="flex items-center gap-2 text-gray-700">
+                <Label htmlFor="address" className="flex items-center gap-2 text-gray-700 font-medium">
                   <MapPin className="h-4 w-4" />
                   Address
                 </Label>
@@ -177,7 +237,7 @@ export default function AdminProfile() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="phone" className="flex items-center gap-2 text-gray-700">
+                <Label htmlFor="phone" className="flex items-center gap-2 text-gray-700 font-medium">
                   <Phone className="h-4 w-4" />
                   Phone
                 </Label>
@@ -191,7 +251,7 @@ export default function AdminProfile() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="flex items-center gap-2 text-gray-700">
+                <Label htmlFor="email" className="flex items-center gap-2 text-gray-700 font-medium">
                   <Mail className="h-4 w-4" />
                   Email
                 </Label>
@@ -207,7 +267,7 @@ export default function AdminProfile() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="introduction" className="text-gray-700">
+              <Label htmlFor="introduction" className="text-gray-700 font-medium">
                 Introduction
               </Label>
               <Textarea
@@ -221,6 +281,7 @@ export default function AdminProfile() {
           </CardContent>
         </Card>
 
+        {/* Social Links Section */}
         <Card className="bg-white border border-gray-200">
           <CardHeader className="bg-white">
             <CardTitle className="text-gray-900">Social Links</CardTitle>
@@ -229,7 +290,7 @@ export default function AdminProfile() {
           <CardContent className="space-y-4 bg-white">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="linkedin" className="flex items-center gap-2 text-gray-700">
+                <Label htmlFor="linkedin" className="flex items-center gap-2 text-gray-700 font-medium">
                   <Linkedin className="h-4 w-4" />
                   LinkedIn
                 </Label>
@@ -243,7 +304,7 @@ export default function AdminProfile() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="github" className="flex items-center gap-2 text-gray-700">
+                <Label htmlFor="github" className="flex items-center gap-2 text-gray-700 font-medium">
                   <Github className="h-4 w-4" />
                   GitHub
                 </Label>
@@ -257,7 +318,7 @@ export default function AdminProfile() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="twitter" className="flex items-center gap-2 text-gray-700">
+                <Label htmlFor="twitter" className="flex items-center gap-2 text-gray-700 font-medium">
                   <Twitter className="h-4 w-4" />
                   Twitter
                 </Label>
@@ -273,6 +334,7 @@ export default function AdminProfile() {
           </CardContent>
         </Card>
 
+        {/* Resume Section */}
         <Card className="bg-white border border-gray-200">
           <CardHeader className="bg-white">
             <CardTitle className="flex items-center gap-2 text-gray-900">
@@ -283,7 +345,7 @@ export default function AdminProfile() {
           </CardHeader>
           <CardContent className="space-y-4 bg-white">
             <div className="space-y-2">
-              <Label htmlFor="resume" className="text-gray-700">
+              <Label htmlFor="resume" className="text-gray-700 font-medium">
                 Resume File
               </Label>
               <div className="flex items-center gap-4">
@@ -295,13 +357,20 @@ export default function AdminProfile() {
                   className="bg-white border-gray-300 text-gray-900"
                 />
                 {profile.resumeUrl && (
-                  <Button type="button" variant="outline" size="sm" asChild className="bg-white border-gray-300 text-gray-700">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    asChild
+                    className="bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                  >
                     <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer">
                       View Current
                     </a>
                   </Button>
                 )}
               </div>
+              <p className="text-sm text-gray-500">Upload a PDF file (max 10MB). This will be available for download on your portfolio.</p>
             </div>
           </CardContent>
         </Card>

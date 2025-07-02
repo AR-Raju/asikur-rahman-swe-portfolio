@@ -10,24 +10,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { Blog } from "@/interfaces";
 import { apiClient } from "@/lib/auth";
 import { Calendar, Star } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
-
-interface Blog {
-  _id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  category: string;
-  tags: string[];
-  featuredImage: string;
-  status: string;
-  featured: boolean;
-  createdAt: string;
-}
 
 const blogCategories = ["Technology", "Web Development", "Mobile Development", "Design", "Tutorial", "Opinion", "News", "Other"];
 
