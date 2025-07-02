@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { apiClient } from "@/lib/auth";
 import { motion } from "framer-motion";
 import { Mail, MapPin, MessageCircle, Phone, Send } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -50,22 +51,19 @@ export default function ModernContact() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
+      const response = await apiClient.sendContactMessage(formData);
+      if (response?.success) {
         toast({
-          title: "Message sent successfully!",
-          description: "Thank you for your message. I'll get back to you soon.",
+          title: "success",
+          description: "Thank you for reaching out! I'll get back to you soon.",
         });
-        setFormData({ name: "", email: "", message: "" });
+        setFormData({ name: "", email: "", message: "" }); // Reset form
       } else {
-        throw new Error("Failed to send message");
+        toast({
+          title: "Error",
+          description: "Failed to send message. Please try again later.",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       toast({

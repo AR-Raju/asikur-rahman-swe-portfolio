@@ -229,7 +229,10 @@ class ApiClient {
   }
 
   async sendContactMessage(data: any) {
-    return this.request<{ data: any }>("/contact/message", {
+    return this.request<{
+      success: any;
+      data: any;
+    }>("/contact/message", {
       method: "POST",
       body: JSON.stringify(data),
     });
