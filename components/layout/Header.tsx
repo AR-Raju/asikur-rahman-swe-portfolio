@@ -37,7 +37,7 @@ export default function Header() {
     <header id="toolbar_area">
       <div className="container flex items-center justify-between mx-auto">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <span className="pl-4 self-center text-xl font-semibold whitespace-nowrap dark:text-white">Asikur Rahman</span>
+          <span className="pl-4 sm:pl-0 self-center text-xl font-semibold whitespace-nowrap dark:text-white">Asikur Rahman</span>
         </a>
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="font-medium flex">
