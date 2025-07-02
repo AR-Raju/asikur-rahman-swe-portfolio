@@ -1,53 +1,53 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { motion } from "framer-motion"
-import { useInView } from "react-intersection-observer"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Mail, Phone, MapPin, Send, MessageCircle } from "lucide-react"
-import { useState, useEffect } from "react"
-import { useToast } from "@/hooks/use-toast"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { motion } from "framer-motion";
+import { Mail, MapPin, MessageCircle, Phone, Send } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
 
 interface ProfileData {
-  phone: string
-  email: string
-  location: string
+  phone: string;
+  email: string;
+  location: string;
 }
 
 export default function ModernContact() {
-  const [profileData, setProfileData] = useState<ProfileData | null>(null)
+  const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const { toast } = useToast()
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
-  })
+  });
 
   useEffect(() => {
     fetch("/api/profile")
-      .then((res) => res.json())
-      .then((data) => setProfileData(data))
-      .catch((error) => console.error("Error fetching profile:", error))
-  }, [])
+      .then(res => res.json())
+      .then(data => setProfileData(data))
+      .catch(error => console.error("Error fetching profile:", error));
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
     try {
       const response = await fetch("/api/contact", {
@@ -56,30 +56,30 @@ export default function ModernContact() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
-      })
+      });
 
       if (response.ok) {
         toast({
           title: "Message sent successfully!",
           description: "Thank you for your message. I'll get back to you soon.",
-        })
-        setFormData({ name: "", email: "", message: "" })
+        });
+        setFormData({ name: "", email: "", message: "" });
       } else {
-        throw new Error("Failed to send message")
+        throw new Error("Failed to send message");
       }
     } catch (error) {
       toast({
         title: "Error sending message",
         description: "Please try again later or contact me directly.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   if (!profileData) {
-    return null
+    return null;
   }
 
   return (
@@ -112,8 +112,8 @@ export default function ModernContact() {
             <div>
               <h3 className="text-2xl font-bold text-white mb-4">Contact Information</h3>
               <p className="text-gray-400 mb-8">
-                Feel free to reach out through any of the following channels. I'm always open to discussing new
-                opportunities and interesting projects.
+                Feel free to reach out through any of the following channels. I'm always open to discussing new opportunities and
+                interesting projects.
               </p>
             </div>
 
@@ -126,10 +126,7 @@ export default function ModernContact() {
                     </div>
                     <div>
                       <h4 className="text-white font-semibold mb-1">Email</h4>
-                      <a
-                        href={`mailto:${profileData.email}`}
-                        className="text-teal-400 hover:text-teal-300 transition-colors"
-                      >
+                      <a href={`mailto:${profileData.email}`} className="text-teal-400 hover:text-teal-300 transition-colors">
                         {profileData.email}
                       </a>
                     </div>
@@ -145,10 +142,7 @@ export default function ModernContact() {
                     </div>
                     <div>
                       <h4 className="text-white font-semibold mb-1">Phone</h4>
-                      <a
-                        href={`tel:${profileData.phone}`}
-                        className="text-teal-400 hover:text-teal-300 transition-colors"
-                      >
+                      <a href={`tel:${profileData.phone}`} className="text-teal-400 hover:text-teal-300 transition-colors">
                         {profileData.phone}
                       </a>
                     </div>
@@ -259,5 +253,5 @@ export default function ModernContact() {
         </div>
       </div>
     </section>
-  )
+  );
 }

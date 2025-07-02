@@ -1,14 +1,14 @@
-'use client';
-import { useEffect, useState } from 'react';
+"use client";
+import { useEffect, useState } from "react";
 
 export default function Header() {
-  const [activeSection, setActiveSection] = useState('hero_area');
+  const [activeSection, setActiveSection] = useState("hero_area");
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero_area', 'experience_area', 'skill_area', 'portfolio_area', 'blog_area', 'contact_area'];
+      const sections = ["hero_area", "experience_area", "education_area", "skill_area", "projects_area", "blog_area", "contact_area"];
 
-      const current = sections.find((section) => {
+      const current = sections.find(section => {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
@@ -22,14 +22,14 @@ export default function Header() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
+      section.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -43,9 +43,9 @@ export default function Header() {
           <ul className="font-medium flex">
             <li>
               <a
-                onClick={() => scrollToSection('hero_area')}
+                onClick={() => scrollToSection("hero_area")}
                 className={`block py-2 px-3 rounded md:bg-transparent cursor-pointer ${
-                  activeSection === 'hero_area' ? 'text-primary' : ''
+                  activeSection === "hero_area" ? "text-primary" : ""
                 }`}
               >
                 Intro
@@ -53,9 +53,9 @@ export default function Header() {
             </li>
             <li>
               <a
-                onClick={() => scrollToSection('experience_area')}
+                onClick={() => scrollToSection("experience_area")}
                 className={`block py-2 px-3 rounded md:bg-transparent cursor-pointer ${
-                  activeSection === 'experience_area' ? 'text-primary' : ''
+                  activeSection === "experience_area" ? "text-primary" : ""
                 }`}
               >
                 Experiences
@@ -63,9 +63,19 @@ export default function Header() {
             </li>
             <li>
               <a
-                onClick={() => scrollToSection('skill_area')}
+                onClick={() => scrollToSection("education_area")}
                 className={`block py-2 px-3 rounded md:bg-transparent cursor-pointer ${
-                  activeSection === 'skill_area' ? 'text-primary' : ''
+                  activeSection === "education_area" ? "text-primary" : ""
+                }`}
+              >
+                Education
+              </a>
+            </li>
+            <li>
+              <a
+                onClick={() => scrollToSection("skill_area")}
+                className={`block py-2 px-3 rounded md:bg-transparent cursor-pointer ${
+                  activeSection === "skill_area" ? "text-primary" : ""
                 }`}
               >
                 Skills
@@ -73,9 +83,9 @@ export default function Header() {
             </li>
             <li>
               <a
-                onClick={() => scrollToSection('portfolio_area')}
+                onClick={() => scrollToSection("projects_area")}
                 className={`block py-2 px-3 rounded md:bg-transparent cursor-pointer ${
-                  activeSection === 'portfolio_area' ? 'text-primary' : ''
+                  activeSection === "projects_area" ? "text-primary" : ""
                 }`}
               >
                 Projects
@@ -83,9 +93,9 @@ export default function Header() {
             </li>
             <li>
               <a
-                onClick={() => scrollToSection('blog_area')}
+                onClick={() => scrollToSection("blog_area")}
                 className={`block py-2 px-3 rounded md:bg-transparent cursor-pointer ${
-                  activeSection === 'blog_area' ? 'text-primary' : ''
+                  activeSection === "blog_area" ? "text-primary" : ""
                 }`}
               >
                 Blog
@@ -93,9 +103,9 @@ export default function Header() {
             </li>
             <li>
               <a
-                onClick={() => scrollToSection('contact_area')}
+                onClick={() => scrollToSection("contact_area")}
                 className={`block py-2 px-3 rounded md:bg-transparent cursor-pointer ${
-                  activeSection === 'contact_area' ? 'text-primary' : ''
+                  activeSection === "contact_area" ? "text-primary" : ""
                 }`}
               >
                 Contact

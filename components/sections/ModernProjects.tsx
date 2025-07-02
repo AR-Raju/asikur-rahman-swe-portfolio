@@ -1,40 +1,40 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { useInView } from "react-intersection-observer"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { ExternalLink, Github, ArrowRight, Folder } from "lucide-react"
-import { useEffect, useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { motion } from "framer-motion";
+import { ArrowRight, ExternalLink, Folder, Github } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
 
 interface Project {
-  id: number
-  name: string
-  shortDescription: string
-  thumbnail: string
-  techStack: string[]
-  liveUrl: string
-  githubUrl: string
-  featured: boolean
-  status: string
+  id: number;
+  name: string;
+  shortDescription: string;
+  thumbnail: string;
+  techStack: string[];
+  liveUrl: string;
+  githubUrl: string;
+  featured: boolean;
+  status: string;
 }
 
 export default function ModernProjects() {
-  const [projects, setProjects] = useState<Project[]>([])
+  const [projects, setProjects] = useState<Project[]>([]);
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
-  })
+  });
 
   useEffect(() => {
     fetch("/api/projects")
-      .then((res) => res.json())
-      .then((data) => setProjects(data.slice(0, 3))) // Show only first 3 projects
-      .catch((error) => console.error("Error fetching projects:", error))
-  }, [])
+      .then(res => res.json())
+      .then(data => setProjects(data.slice(0, 3))) // Show only first 3 projects
+      .catch(error => console.error("Error fetching projects:", error));
+  }, []);
 
   return (
     <section id="projects_area" className="py-20 bg-gray-800" ref={ref}>
@@ -103,15 +103,11 @@ export default function ModernProjects() {
                 </CardHeader>
 
                 <CardContent className="p-6 flex-1">
-                  <CardTitle className="text-xl mb-3 text-white group-hover:text-teal-400 transition-colors">
-                    {project.name}
-                  </CardTitle>
-                  <CardDescription className="text-gray-400 mb-4 line-clamp-3">
-                    {project.shortDescription}
-                  </CardDescription>
+                  <CardTitle className="text-xl mb-3 text-white group-hover:text-teal-400 transition-colors">{project.name}</CardTitle>
+                  <CardDescription className="text-gray-400 mb-4 line-clamp-3">{project.shortDescription}</CardDescription>
 
                   <div className="flex flex-wrap gap-2">
-                    {project.techStack.slice(0, 3).map((tech) => (
+                    {project.techStack.slice(0, 3).map(tech => (
                       <Badge key={tech} variant="outline" className="text-xs">
                         {tech}
                       </Badge>
@@ -152,5 +148,5 @@ export default function ModernProjects() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { useInView } from "react-intersection-observer"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import { Code, Palette, Database, Wrench } from "lucide-react"
-import { useEffect, useState } from "react"
-import Image from "next/image"
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { motion } from "framer-motion";
+import { Code, Database, Palette, Wrench } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
 
 interface Skill {
-  id: number
-  name: string
-  level: number
-  category: string
-  logo: string
+  id: number;
+  name: string;
+  level: number;
+  category: string;
+  logo: string;
 }
 
 const categoryIcons = {
@@ -23,7 +23,7 @@ const categoryIcons = {
   Language: Code,
   Database: Database,
   Tools: Wrench,
-}
+};
 
 const categoryColors = {
   Frontend: "from-pink-500 to-rose-500",
@@ -31,35 +31,32 @@ const categoryColors = {
   Language: "from-blue-500 to-cyan-500",
   Database: "from-purple-500 to-violet-500",
   Tools: "from-orange-500 to-amber-500",
-}
+};
 
 export default function ModernSkills() {
-  const [skills, setSkills] = useState<Skill[]>([])
+  const [skills, setSkills] = useState<Skill[]>([]);
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
-  })
+  });
 
   useEffect(() => {
     fetch("/api/skills")
-      .then((res) => res.json())
-      .then((data) => setSkills(data))
-      .catch((error) => console.error("Error fetching skills:", error))
-  }, [])
+      .then(res => res.json())
+      .then(data => setSkills(data))
+      .catch(error => console.error("Error fetching skills:", error));
+  }, []);
 
-  const groupedSkills = skills.reduce(
-    (acc, skill) => {
-      if (!acc[skill.category]) {
-        acc[skill.category] = []
-      }
-      acc[skill.category].push(skill)
-      return acc
-    },
-    {} as Record<string, Skill[]>,
-  )
+  const groupedSkills = skills.reduce((acc, skill) => {
+    if (!acc[skill.category]) {
+      acc[skill.category] = [];
+    }
+    acc[skill.category].push(skill);
+    return acc;
+  }, {} as Record<string, Skill[]>);
 
   return (
-    <section id="skills_area" className="py-20 bg-gray-900" ref={ref}>
+    <section id="skill_area" className="py-20 bg-gray-900" ref={ref}>
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -79,8 +76,8 @@ export default function ModernSkills() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {Object.entries(groupedSkills).map(([category, categorySkills], categoryIndex) => {
-            const IconComponent = categoryIcons[category as keyof typeof categoryIcons] || Code
-            const gradientColor = categoryColors[category as keyof typeof categoryColors] || "from-gray-500 to-gray-600"
+            const IconComponent = categoryIcons[category as keyof typeof categoryIcons] || Code;
+            const gradientColor = categoryColors[category as keyof typeof categoryColors] || "from-gray-500 to-gray-600";
 
             return (
               <motion.div
@@ -92,9 +89,7 @@ export default function ModernSkills() {
                 <Card className="bg-gray-800 border-gray-700 h-full">
                   <CardContent className="p-8">
                     <div className="flex items-center gap-3 mb-6">
-                      <div
-                        className={`w-12 h-12 rounded-lg bg-gradient-to-r ${gradientColor} flex items-center justify-center`}
-                      >
+                      <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${gradientColor} flex items-center justify-center`}>
                         <IconComponent className="h-6 w-6 text-white" />
                       </div>
                       <div>
@@ -117,12 +112,7 @@ export default function ModernSkills() {
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
                               <div className="w-8 h-8 relative">
-                                <Image
-                                  src={skill.logo || "/placeholder.svg"}
-                                  alt={skill.name}
-                                  fill
-                                  className="object-contain"
-                                />
+                                <Image src={skill.logo || "/placeholder.svg"} alt={skill.name} fill className="object-contain" />
                               </div>
                               <span className="text-white font-medium">{skill.name}</span>
                             </div>
@@ -135,10 +125,10 @@ export default function ModernSkills() {
                   </CardContent>
                 </Card>
               </motion.div>
-            )
+            );
           })}
         </div>
       </div>
     </section>
-  )
+  );
 }

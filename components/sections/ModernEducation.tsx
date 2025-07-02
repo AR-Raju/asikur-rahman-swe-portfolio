@@ -1,35 +1,35 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { useInView } from "react-intersection-observer"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { GraduationCap, MapPin, Calendar } from "lucide-react"
-import { useEffect, useState } from "react"
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { motion } from "framer-motion";
+import { Calendar, GraduationCap, MapPin } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
 
 interface Education {
-  id: number
-  institution: string
-  degree: string
-  period: string
-  description: string
-  location: string
-  gpa: string
+  id: number;
+  institution: string;
+  degree: string;
+  period: string;
+  description: string;
+  location: string;
+  gpa: string;
 }
 
 export default function ModernEducation() {
-  const [education, setEducation] = useState<Education[]>([])
+  const [education, setEducation] = useState<Education[]>([]);
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
-  })
+  });
 
   useEffect(() => {
     fetch("/api/education")
-      .then((res) => res.json())
-      .then((data) => setEducation(data))
-      .catch((error) => console.error("Error fetching education:", error))
-  }, [])
+      .then(res => res.json())
+      .then(data => setEducation(data))
+      .catch(error => console.error("Error fetching education:", error));
+  }, []);
 
   return (
     <section id="education_area" className="py-20 bg-gray-800" ref={ref}>
@@ -105,5 +105,5 @@ export default function ModernEducation() {
         </div>
       </div>
     </section>
-  )
+  );
 }

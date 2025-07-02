@@ -12,7 +12,7 @@ import { useState } from "react";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("admin@portfolio.com");
-  const [password, setPassword] = useState("admin123456");
+  const [password, setPassword] = useState("admin123");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { login } = useAdmin();
@@ -108,7 +108,7 @@ export default function AdminLogin() {
                   <strong>Email:</strong> admin@portfolio.com
                 </p>
                 <p>
-                  <strong>Password:</strong> admin123456
+                  <strong>Password:</strong> admin123
                 </p>
               </div>
             </div>
