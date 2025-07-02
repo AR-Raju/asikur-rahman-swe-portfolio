@@ -190,7 +190,7 @@ export default function ModernContact() {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="bg-gray-800 border-gray-600 text-white focus:border-teal-500"
+                      className="bg-gray-800 border-gray-600 text-white focus:border-teal-500 placeholder-gray-700"
                       placeholder="John Doe"
                     />
                   </div>
@@ -206,7 +206,7 @@ export default function ModernContact() {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="bg-gray-800 border-gray-600 text-white focus:border-teal-500"
+                      className="bg-gray-800 border-gray-600 text-white focus:border-teal-500 placeholder-gray-700"
                       placeholder="john@example.com"
                     />
                   </div>
@@ -222,7 +222,7 @@ export default function ModernContact() {
                       onChange={handleChange}
                       required
                       rows={5}
-                      className="bg-gray-800 border-gray-600 text-white focus:border-teal-500 resize-none"
+                      className="bg-gray-800 border-gray-600 text-white focus:border-teal-500 resize-none placeholder-gray-700"
                       placeholder="Tell me about your project..."
                     />
                   </div>

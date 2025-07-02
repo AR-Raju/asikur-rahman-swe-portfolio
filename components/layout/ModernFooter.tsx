@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { useInView } from "react-intersection-observer"
-import Link from "next/link"
-import { Github, Linkedin, Mail, ArrowUp } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { ArrowUp, Github, Linkedin, Mail } from "lucide-react";
+import Link from "next/link";
+import { useInView } from "react-intersection-observer";
 
 export default function ModernFooter() {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
-  })
+  });
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="bg-gray-900 border-t border-gray-800" ref={ref}>
@@ -31,8 +31,7 @@ export default function ModernFooter() {
           >
             <h3 className="text-2xl font-bold text-white mb-4">Asikur Rahman</h3>
             <p className="text-gray-400 mb-6 max-w-md">
-              Senior Software Engineer passionate about creating exceptional digital experiences. Let's build something
-              amazing together.
+              Software Engineer passionate about creating exceptional digital experiences. Let's build something amazing together.
             </p>
             <div className="flex gap-4">
               <a
@@ -105,10 +104,7 @@ export default function ModernFooter() {
             <h4 className="text-lg font-semibold text-white mb-4">Contact</h4>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="mailto:rahman99.asikur@gmail.com"
-                  className="text-gray-400 hover:text-teal-400 transition-colors"
-                >
+                <a href="mailto:rahman99.asikur@gmail.com" className="text-gray-400 hover:text-teal-400 transition-colors">
                   rahman99.asikur@gmail.com
                 </a>
               </li>
@@ -145,5 +141,5 @@ export default function ModernFooter() {
         </motion.div>
       </div>
     </footer>
-  )
+  );
 }

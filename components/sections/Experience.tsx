@@ -51,7 +51,7 @@ export default function Experience() {
   ];
 
   return (
-    <section id="experience_area" className="py-[70px]" ref={ref}>
+    <section id="experience_area" className="py-[70px] px-4" ref={ref}>
       <div className="container mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

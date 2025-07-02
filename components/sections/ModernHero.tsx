@@ -43,7 +43,7 @@ export default function ModernHero() {
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
 
-      <div className="container mx-auto px-4 py-100 relative z-10">
+      <div className="container mx-auto px-4 py-20 md:py-0 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-screen">
           {/* Left Content */}
           <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="space-y-8">

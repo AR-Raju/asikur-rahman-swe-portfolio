@@ -88,7 +88,7 @@ h6 {
 }
 
 .section_title::after {
-  content: '';
+  content: "";
   position: absolute;
   left: calc(100% + 14px);
   top: 50%;
@@ -153,7 +153,7 @@ h6 {
 
 .hero_illustrator::before {
   position: absolute;
-  content: '';
+  content: "";
   background-color: #18033c;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -185,7 +185,7 @@ h6 {
 }
 
 .hero_avatar_img::before {
-  content: '';
+  content: "";
   position: absolute;
   z-index: 0;
   left: 50%;
@@ -258,6 +258,10 @@ h6 {
 /* Contact Area */
 #contact_area {
   padding: 80px 0;
+}
+
+input::placeholder {
+  color: #9ca3af; /* Tailwind gray-400 */
 }
 
 /* Toolbar Area */
