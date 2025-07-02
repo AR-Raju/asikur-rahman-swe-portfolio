@@ -1,6 +1,7 @@
 "use client";
 import ExperienceItem from "@/components/ui/ExperienceItem";
 import { motion } from "framer-motion";
+import { Building2Icon } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 
 export default function Experience() {
@@ -56,10 +57,17 @@ export default function Experience() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.5 }}
-          className="flex items-center flex-wrap justify-between mb-6"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
         >
-          <h2 className="section_title">Work Experience</h2>
+          <div className="flex items-center justify-center gap-2 text-teal-400 mb-4">
+            <Building2Icon className="h-6 w-6" />
+            <span className="text-sm font-medium tracking-wider uppercase">Experience</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Professional Experience</h2>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            My professional journey where I honed my technical expertise, collaboration, and real-world problem-solving skills.
+          </p>
         </motion.div>
         <div className="experience_list">
           {experiences.map((experience, index) => (
