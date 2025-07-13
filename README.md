@@ -66,7 +66,7 @@ This project is open source and available under the MIT License.
 ## Author
 
 Asikur Rahman
-LinkedIn: https://www.linkedin.com/in/asikurrahman-raju/
+LinkedIn: https://www.linkedin.com/in/rahmanasikur/
 GitHub: https://github.com/AR-Raju
 Twitter: https://twitter.com/asikurrahman
 
